@@ -89,7 +89,8 @@ func UpHandler(w http.ResponseWriter, r *http.Request) {
 	if check != true {
 		return
 	}
-	cmd := exec.Command(path, "up")
+	//cmd := exec.Command(path, "up", "--register-server=http://solopace-controler.doaction.tech:8080", "--accept-routes=true", "--accept-dns=false", "--unattended=true")
+	cmd := exec.Command(path, "up", "--register-server=https://solopace-controler.doaction.pro", "--accept-routes=true", "--accept-dns=false", "--unattended=true")
 	stdout, err := cmd.Output()
 	if err != nil {
 		resData.Code = 400
@@ -97,12 +98,15 @@ func UpHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(resData)
 		return
 	}
-
-	resData.Code = 200
-	resData.Msg = ""
-	resData.Data = string(stdout)
-	fmt.Printf(string(stdout))
-	json.NewEncoder(w).Encode(resData)
+	var res ResData
+	err = json.Unmarshal(stdout, &res)
+	if err != nil {
+		resData.Code = 400
+		resData.Msg = err.Error()
+		json.NewEncoder(w).Encode(resData)
+		return
+	}
+	json.NewEncoder(w).Encode(res)
 }
 func DownHandler(w http.ResponseWriter, r *http.Request) {
 	resData := ResData{
@@ -123,11 +127,15 @@ func DownHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resData.Code = 200
-	resData.Msg = ""
-	resData.Data = string(stdout)
-	fmt.Printf(string(stdout))
-	json.NewEncoder(w).Encode(resData)
+	var res ResData
+	err = json.Unmarshal(stdout, &res)
+	if err != nil {
+		resData.Code = 400
+		resData.Msg = err.Error()
+		json.NewEncoder(w).Encode(resData)
+		return
+	}
+	json.NewEncoder(w).Encode(res)
 }
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	resData := ResData{
@@ -148,11 +156,15 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resData.Code = 200
-	resData.Msg = ""
-	resData.Data = string(stdout)
-	fmt.Printf(string(stdout))
-	json.NewEncoder(w).Encode(resData)
+	var res ResData
+	err = json.Unmarshal(stdout, &res)
+	if err != nil {
+		resData.Code = 400
+		resData.Msg = err.Error()
+		json.NewEncoder(w).Encode(resData)
+		return
+	}
+	json.NewEncoder(w).Encode(res)
 }
 func PingHandleder(w http.ResponseWriter, r *http.Request) {
 	resData := ResData{
@@ -173,11 +185,15 @@ func PingHandleder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resData.Code = 200
-	resData.Msg = ""
-	resData.Data = string(stdout)
-	fmt.Printf(string(stdout))
-	json.NewEncoder(w).Encode(resData)
+	var res ResData
+	err = json.Unmarshal(stdout, &res)
+	if err != nil {
+		resData.Code = 400
+		resData.Msg = err.Error()
+		json.NewEncoder(w).Encode(resData)
+		return
+	}
+	json.NewEncoder(w).Encode(res)
 }
 func StatusHandleder(w http.ResponseWriter, r *http.Request) {
 	resData := ResData{
@@ -189,7 +205,7 @@ func StatusHandleder(w http.ResponseWriter, r *http.Request) {
 	if check != true {
 		return
 	}
-	cmd := exec.Command(path, "status")
+	cmd := exec.Command(path, "status", "--gem=true")
 	stdout, err := cmd.Output()
 	fmt.Printf(string(stdout))
 	if err != nil {
@@ -198,9 +214,13 @@ func StatusHandleder(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(resData)
 		return
 	}
-	resData.Code = 200
-	resData.Msg = ""
-	resData.Data = string(stdout)
-	fmt.Printf(string(stdout))
-	json.NewEncoder(w).Encode(resData)
+	var res ResData
+	err = json.Unmarshal(stdout, &res)
+	if err != nil {
+		resData.Code = 400
+		resData.Msg = err.Error()
+		json.NewEncoder(w).Encode(resData)
+		return
+	}
+	json.NewEncoder(w).Encode(res)
 }
