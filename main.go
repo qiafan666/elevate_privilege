@@ -20,7 +20,7 @@ func main() {
 	flag.Parse()
 	result := make(map[string]interface{}, 2)
 
-	if strings.Contains(args.Path, "solopacedoored.exe") {
+	if strings.Contains(args.Path, "solopacegemed.exe") {
 		cmd := elevate.Command(args.Path, "install-system-daemon")
 		// 开始运行
 		err := cmd.Run()
